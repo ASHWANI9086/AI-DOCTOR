@@ -1,0 +1,88 @@
+# ═══════════════════════════════════════════════════════════════
+#  docker-compose.yml — VisionaryCare AI Doctor
+#  Local:      docker compose up --build
+#  Production: docker compose -f docker-compose.yml up -d
+# ═══════════════════════════════════════════════════════════════
+
+services:
+
+  # ── Gradio AI Doctor App ──────────────────────────────────────
+  ai-doctor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: ai-doctor-app
+    restart: unless-stopped
+
+    # Load API keys from .env — never baked into the image
+    env_file:
+      - .env
+
+    # Extra environment overrides for Gradio in Docker
+    environment:
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - GRADIO_SERVER_PORT=7860
+      - PYTHONUNBUFFERED=1
+
+    # Internal-only: Nginx proxies from 80 → 7860
+    # Comment out ports if you don't want direct access
+    ports:
+      - "7860:7860"
+
+    # Persist generated audio files across restarts
+    volumes:
+      - audio_output:/app/audio
+
+    networks:
+      - app-network
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860/gradio_api/startup-events"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+    # Resource limits (adjust for your VPS size)
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 256M
+
+
+  # ── Nginx Reverse Proxy ───────────────────────────────────────
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: ai-doctor-nginx
+    restart: unless-stopped
+
+    ports:
+      - "80:80"
+      # Uncomment after setting up SSL:
+      # - "443:443"
+
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      # Uncomment for SSL certificates (Let's Encrypt):
+      # - /etc/letsencrypt:/etc/letsencrypt:ro
+      # - /var/www/certbot:/var/www/certbot:ro
+
+    depends_on:
+      ai-doctor:
+        condition: service_healthy
+
+    networks:
+      - app-network
+
+
+# ── Shared Resources ──────────────────────────────────────────
+volumes:
+  audio_output:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

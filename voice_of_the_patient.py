@@ -1,4 +1,4 @@
-#step1: setup Audio recorder (ffmpeg & portaudio)
+# step1: setup Audio recorder (ffmpeg & portaudio)
 # ffmpeg , portaudio
 
 import logging
@@ -15,7 +15,7 @@ def record_audio(file_path, timeout=20, phrase_time_limit=None):
     Args:
     file_path (str): Path to save the recorded audio file.
     timeout (int): Maximum time to wait for a phrase to start (in seconds).
-    phrase_time_lfimit (int): Maximum time for the phrase to be recorded (in seconds).
+    phrase_time_limit (int): Maximum time for the phrase to be recorded (in seconds).
     """
     recognizer = sr.Recognizer()
     
@@ -39,57 +39,18 @@ def record_audio(file_path, timeout=20, phrase_time_limit=None):
     except Exception as e:
         logging.error(f"An error occurred: {e}")
 
-audio_filepath="patient_voice_test.mp3"
-record_audio(file_path=audio_filepath)
 
-
-# step2: setup speech to text-STT-modal for trancription 
+# step2: setup speech to text-STT-modal for transcription
 
 import os
 from groq import Groq
 
-GROQ_API_KEY=os.environ.get("GROQ_API_KEY")
-stt_model="whisper-large-v3"
-
 def transcribe_with_groq(stt_model, audio_filepath, GROQ_API_KEY):
-
-    client=Groq(api_key=GROQ_API_KEY)
-    audio_file=open(audio_filepath, "rb")
-    transcription=client.audio.transcriptions.create(
+    client = Groq(api_key=GROQ_API_KEY)
+    audio_file = open(audio_filepath, "rb")
+    transcription = client.audio.transcriptions.create(
                 model=stt_model,
                 file=audio_file,
                 language="en"
     )
     return transcription.text
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,61 @@
+# ── Git ──────────────────────────────────────────────────────────
+.git
+.gitignore
+.gitattributes
+
+# ── Python cache ──────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── Virtual environments ──────────────────────────────────────────
+venv/
+.venv/
+env/
+Pipfile
+Pipfile.lock
+
+# ── IDE & OS ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# ── Audio/media files (generated at runtime) ──────────────────────
+*.mp3
+*.wav
+*.ogg
+audio/
+
+# ── Gradio temp/flagged outputs ───────────────────────────────────
+flagged/
+gradio_cached_examples/
+
+# ── Logs & debug ──────────────────────────────────────────────────
+*.log
+debug.log
+
+# ── Test & dev files ──────────────────────────────────────────────
+test_groq.py
+test_tts.mp3
+
+# ── Documentation (not needed in container) ───────────────────────
+*.md
+!DEPLOY.md
+
+# ── Secrets (NEVER in the image — loaded at runtime from .env) ────
+.env
+.env.*
+
+# ── Pipenv ────────────────────────────────────────────────────────
+Pipfile
+Pipfile.lock
+
+# ── Other dirs ────────────────────────────────────────────────────
+Ai-health-assistant/
+static/

@@ -1,0 +1,57 @@
+# ── Virtual environments ──────────────────────────────────────────
+venv/
+.venv/
+env/
+
+# ── Python cache ──────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── Audio/media files (generated at runtime) ──────────────────────
+*.mp3
+*.wav
+*.ogg
+audio/
+final.mp3
+output.mp3
+gtts_output.mp3
+gtts_testing.mp3
+elevenlabs_testing.mp3
+elevenlabs_testing_autoplay.mp3
+patient_voice_test.mp3
+test_tts.mp3
+
+# ── Secrets — NEVER commit API keys ──────────────────────────────
+.env
+.env.*
+
+# ── Logs & debug ──────────────────────────────────────────────────
+*.log
+debug.log
+
+# ── Gradio temp outputs ───────────────────────────────────────────
+flagged/
+gradio_cached_examples/
+
+# ── IDE & OS ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# ── Pipenv ────────────────────────────────────────────────────────
+Pipfile
+Pipfile.lock
+
+# ── Other dirs not needed for deployment ─────────────────────────
+Ai-health-assistant/
+static/
+
+# ── Compiled python cache ─────────────────────────────────────────
+*.cpython-*.pyc
